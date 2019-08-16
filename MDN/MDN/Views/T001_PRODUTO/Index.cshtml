@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MDN.Models.Entities.T001_PRODUTO>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.T001_TITULO)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.T001_DESCRICAO)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.T001_PRECO)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.T001_FOTO)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.T001_TITULO)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.T001_DESCRICAO)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.T001_PRECO)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.T001_FOTO)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.T001_ID_PRODUTO">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.T001_ID_PRODUTO">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.T001_ID_PRODUTO">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

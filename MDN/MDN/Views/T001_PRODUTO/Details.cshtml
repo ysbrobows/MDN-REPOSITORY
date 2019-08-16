@@ -1,0 +1,42 @@
+﻿@model MDN.Models.Entities.T001_PRODUTO
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>T001_PRODUTO</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.T001_TITULO)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.T001_TITULO)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.T001_DESCRICAO)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.T001_DESCRICAO)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.T001_PRECO)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.T001_PRECO)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.T001_FOTO)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.T001_FOTO)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.T001_ID_PRODUTO">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

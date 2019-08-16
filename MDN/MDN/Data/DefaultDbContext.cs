@@ -12,12 +12,12 @@ namespace MDN.Data
     public class DefaultDbContext : IdentityDbContext<ApplicationUser>
     {
 
-        public DefaultDbContext(DbContextOptions<ApplicationDbContext> options)
+        public DefaultDbContext(DbContextOptions<DefaultDbContext> options)
            : base(options)
         {
         }
 
-        public virtual T001_PRODUTO T001_PRODUTO { get; set; }
+      //  public virtual T001_PRODUTO T001_PRODUTO_1 { get; set; }
         public virtual T002_CATEGORIA T002_CATEGORIA { get; set; }
         public virtual T003_UF T003_UF { get; set; }
 
@@ -31,5 +31,7 @@ namespace MDN.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<MDN.Models.Entities.T001_PRODUTO> T001_PRODUTO { get; set; }
     }
 }
