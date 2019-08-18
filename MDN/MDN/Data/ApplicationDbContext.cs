@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MDN.Models;
+using MDN.Models.Entities;
 
 namespace MDN.Data
 {
@@ -15,6 +16,9 @@ namespace MDN.Data
         {
         }
 
+        public virtual T002_CATEGORIA T002_CATEGORIA { get; set; }
+        public virtual T003_UF T003_UF { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -22,5 +26,7 @@ namespace MDN.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<MDN.Models.Entities.T001_PRODUTO> T001_PRODUTO { get; set; }
     }
 }

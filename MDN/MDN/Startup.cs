@@ -30,8 +30,8 @@ namespace MDN
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 
-            services.AddDbContext<DefaultDbContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
+            //services.AddDbContext<DefaultDbContext>(options =>
+            //   options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

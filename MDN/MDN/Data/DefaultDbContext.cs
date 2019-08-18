@@ -17,10 +17,6 @@ namespace MDN.Data
         {
         }
 
-      //  public virtual T001_PRODUTO T001_PRODUTO_1 { get; set; }
-        public virtual T002_CATEGORIA T002_CATEGORIA { get; set; }
-        public virtual T003_UF T003_UF { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -33,5 +29,7 @@ namespace MDN.Data
         }
 
         public DbSet<MDN.Models.Entities.T001_PRODUTO> T001_PRODUTO { get; set; }
+        public DbSet<MDN.Models.Entities.T002_CATEGORIA> T002_CATEGORIA { get; set; }
+        public DbSet<MDN.Models.Entities.T003_UF> T003_UF { get; set; }
     }
 }
