@@ -33,6 +33,12 @@ namespace MDN
             //services.AddDbContext<DefaultDbContext>(options =>
             //   options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
+            services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = Configuration["Authentication:Facebook:AppId"];
+                options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
