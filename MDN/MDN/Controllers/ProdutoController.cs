@@ -46,6 +46,9 @@ namespace MDN.Controllers
         // GET: Produto/Create
         public IActionResult Create()
         {
+            var T002_CATEGORIA = _context.Set<T002_CATEGORIA>().ToList();
+            ViewBag.Categorias = T002_CATEGORIA;
+            //@Html.DropDownListFor(model => model.tipo, listItems, "-- Select Status --")
             return View();
         }
 

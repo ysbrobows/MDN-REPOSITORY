@@ -4,38 +4,47 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h4>Inserir anúncio</h4>
 
-<h4>T001_PRODUTO</h4>
+<h2 align="center">O que você está anunciando?</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="T001_TITULO" class="control-label"></label>
+                <label asp-for="T001_TITULO" class="control-label">TÍTULO</label>
                 <input asp-for="T001_TITULO" class="form-control" />
                 <span asp-validation-for="T001_TITULO" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="T001_DESCRICAO" class="control-label"></label>
-                <input asp-for="T001_DESCRICAO" class="form-control" />
+
+                <label asp-for="T001_DESCRICAO" class="control-label">DESCRIÇÃO</label>
+                @Html.TextArea("DESCRIÇÃO", new { rows = 10, cols = 40 })
                 <span asp-validation-for="T001_DESCRICAO" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="T001_PRECO" class="control-label"></label>
+                <label asp-for="T001_PRECO" class="control-label">PREÇO</label>
                 <input asp-for="T001_PRECO" class="form-control" />
                 <span asp-validation-for="T001_PRECO" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="T001_FOTO" class="control-label"></label>
-                <input asp-for="T001_FOTO" class="form-control" />
-                <span asp-validation-for="T001_FOTO" class="text-danger"></span>
+                <label asp-for="T002_CATEGORIANavigation.T002_ID_CATEGORIA" class="control-label">CATEGORIA</label>
+                @Html.DropDownListFor(x => x.T002_CATEGORIANavigation.T002_NO_CATEGORIA, new SelectList(ViewBag.Categorias, "T002_ID_CATEGORIA", "T002_NO_CATEGORIA"))
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+                @*<div class="form-group">
+            <label asp-for="T001_FOTO" class="control-label"></label>
+            <input asp-for="T001_FOTO" class="form-control" />
+            <span asp-validation-for="T001_FOTO" class="text-danger"></span>
+        </div>*@
+                <div class="form-group">
+                    <input type="file" accept=".png, .jpg, .jpeg" multiple />
+                    <img src="~/images/uploadButton.png" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+</form>
     </div>
 </div>
 
