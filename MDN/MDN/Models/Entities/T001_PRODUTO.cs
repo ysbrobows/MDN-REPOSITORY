@@ -15,7 +15,14 @@ namespace MDN.Models.Entities
         public string T001_DESCRICAO { get; set; }
         public decimal T001_PRECO { get; set; }
         public string T001_FOTO { get; set; }
+        public int T003_ID_UF { get; set; }
+        public int T002_ID_CATEGORIA { get; set; }
 
+        public string UserName { get; set; }
+
+        //[ForeignKey("Id")]
+        //[InverseProperty("T001_PRODUTO")]
+        //public virtual T003_UF T003_UFNavigation { get; set; }
 
         [ForeignKey("T003_ID_UF")]
         [InverseProperty("T001_PRODUTO")]

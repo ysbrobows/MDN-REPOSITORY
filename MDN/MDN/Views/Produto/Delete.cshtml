@@ -35,6 +35,18 @@
         <dd>
             @Html.DisplayFor(model => model.T001_FOTO)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.T002_CATEGORIANavigation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.T002_CATEGORIANavigation.T002_ID_CATEGORIA)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.T003_UFNavigation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.T003_UFNavigation.T003_ID_UF)
+        </dd>
     </dl>
     
     <form asp-action="Delete">

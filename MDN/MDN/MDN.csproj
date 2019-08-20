@@ -12,6 +12,11 @@
     <None Remove="NovaPasta\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\css\bootstrap-imageupload.min.css" />
+    <Content Remove="wwwroot\js\bootstrap-imageupload.min.js" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />

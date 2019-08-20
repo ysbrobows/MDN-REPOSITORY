@@ -22,7 +22,8 @@ namespace MDN.Controllers
         // GET: Produto
         public async Task<IActionResult> Index()
         {
-            return View(await _context.T001_PRODUTO.ToListAsync());
+            var applicationDbContext = _context.T001_PRODUTO.Include(t => t.T002_CATEGORIANavigation).Include(t => t.T003_UFNavigation);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Produto/Details/5
@@ -34,6 +35,8 @@ namespace MDN.Controllers
             }
 
             var t001_PRODUTO = await _context.T001_PRODUTO
+                .Include(t => t.T002_CATEGORIANavigation)
+                .Include(t => t.T003_UFNavigation)
                 .SingleOrDefaultAsync(m => m.T001_ID_PRODUTO == id);
             if (t001_PRODUTO == null)
             {
@@ -46,9 +49,8 @@ namespace MDN.Controllers
         // GET: Produto/Create
         public IActionResult Create()
         {
-            var T002_CATEGORIA = _context.Set<T002_CATEGORIA>().ToList();
-            ViewBag.Categorias = T002_CATEGORIA;
-            //@Html.DropDownListFor(model => model.tipo, listItems, "-- Select Status --")
+            ViewData["CATEGORIAS"] = new SelectList(_context.Set<T002_CATEGORIA>(), "T002_ID_CATEGORIA", "T002_NO_CATEGORIA");
+            ViewData["UFS"] = new SelectList(_context.Set<T003_UF>(), "T003_ID_UF", "T003_NO_UF");
             return View();
         }
 
@@ -57,14 +59,18 @@ namespace MDN.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("T001_ID_PRODUTO,T001_TITULO,T001_DESCRICAO,T001_PRECO,T001_FOTO")] T001_PRODUTO t001_PRODUTO)
+        public async Task<IActionResult> Create([Bind("T001_ID_PRODUTO,T001_TITULO,T001_DESCRICAO,T001_PRECO,T001_FOTO,T003_ID_UF,T002_ID_CATEGORIA")] T001_PRODUTO t001_PRODUTO)
         {
             if (ModelState.IsValid)
             {
+                t001_PRODUTO.UserName =  _context.Users.Single(x => x.UserName == User.Identity.Name).UserName;
+               // var id = user.Id;
                 _context.Add(t001_PRODUTO);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CATEGORIAS"] = new SelectList(_context.Set<T002_CATEGORIA>(), "T002_ID_CATEGORIA", "T002_NO_CATEGORIA", t001_PRODUTO.T002_ID_CATEGORIA);
+            ViewData["UFS"] = new SelectList(_context.Set<T003_UF>(), "T003_ID_UF", "T003_NO_UF", t001_PRODUTO.T003_ID_UF);
             return View(t001_PRODUTO);
         }
 
@@ -81,6 +87,8 @@ namespace MDN.Controllers
             {
                 return NotFound();
             }
+            ViewData["T002_ID_CATEGORIA"] = new SelectList(_context.Set<T002_CATEGORIA>(), "T002_ID_CATEGORIA", "T002_ID_CATEGORIA", t001_PRODUTO.T002_ID_CATEGORIA);
+            ViewData["T003_ID_UF"] = new SelectList(_context.Set<T003_UF>(), "T003_ID_UF", "T003_ID_UF", t001_PRODUTO.T003_ID_UF);
             return View(t001_PRODUTO);
         }
 
@@ -89,7 +97,7 @@ namespace MDN.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("T001_ID_PRODUTO,T001_TITULO,T001_DESCRICAO,T001_PRECO,T001_FOTO")] T001_PRODUTO t001_PRODUTO)
+        public async Task<IActionResult> Edit(int id, [Bind("T001_ID_PRODUTO,T001_TITULO,T001_DESCRICAO,T001_PRECO,T001_FOTO,T003_ID_UF,T002_ID_CATEGORIA")] T001_PRODUTO t001_PRODUTO)
         {
             if (id != t001_PRODUTO.T001_ID_PRODUTO)
             {
@@ -116,6 +124,8 @@ namespace MDN.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["T002_ID_CATEGORIA"] = new SelectList(_context.Set<T002_CATEGORIA>(), "T002_ID_CATEGORIA", "T002_ID_CATEGORIA", t001_PRODUTO.T002_ID_CATEGORIA);
+            ViewData["T003_ID_UF"] = new SelectList(_context.Set<T003_UF>(), "T003_ID_UF", "T003_ID_UF", t001_PRODUTO.T003_ID_UF);
             return View(t001_PRODUTO);
         }
 
@@ -128,6 +138,8 @@ namespace MDN.Controllers
             }
 
             var t001_PRODUTO = await _context.T001_PRODUTO
+                .Include(t => t.T002_CATEGORIANavigation)
+                .Include(t => t.T003_UFNavigation)
                 .SingleOrDefaultAsync(m => m.T001_ID_PRODUTO == id);
             if (t001_PRODUTO == null)
             {
