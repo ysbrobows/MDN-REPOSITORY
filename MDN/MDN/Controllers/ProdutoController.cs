@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MDN.Data;
 using MDN.Models.Entities;
+using MDN.Helpers;
+using System.IO;
+using Microsoft.AspNetCore.Hosting.Internal;
+using MDN.ViewModels;
 
 namespace MDN.Controllers
 {
@@ -17,6 +21,7 @@ namespace MDN.Controllers
         public ProdutoController(ApplicationDbContext context)
         {
             _context = context;
+            filesHelper = new FilesHelper(DeleteURL, DeleteType, StorageRoot, UrlBase, tempPath, serverMapPath);
         }
 
         // GET: Produto
@@ -163,6 +168,67 @@ namespace MDN.Controllers
         private bool T001_PRODUTOExists(int id)
         {
             return _context.T001_PRODUTO.Any(e => e.T001_ID_PRODUTO == id);
+        }
+
+        //controles do plugin de upload
+        FilesHelper filesHelper;
+        String tempPath = "~/somefiles/";
+        String serverMapPath = "~/Files/somefiles/";
+        private string StorageRoot
+        {
+            get { return Path.Combine(HostingEnvironment.MapPath(serverMapPath)); }
+        }
+        private string UrlBase = "/Files/somefiles/";
+        String DeleteURL = "/FileUpload/DeleteFile/?file=";
+        String DeleteType = "GET";
+
+
+        public ActionResult Show()
+        {
+            JsonFiles ListOfFiles = filesHelper.GetFileList();
+            var model = new FilesViewModel()
+            {
+                Files = ListOfFiles.files
+            };
+
+            return View(model);
+        }
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Upload()
+        {
+            var resultList = new List<ViewDataUploadFilesResult>();
+
+            var CurrentContext = HttpContext;
+
+            filesHelper.UploadAndShowResults(CurrentContext, resultList);
+            JsonFiles files = new JsonFiles(resultList);
+
+            bool isEmpty = !resultList.Any();
+            if (isEmpty)
+            {
+                return Json("Error ");
+            }
+            else
+            {
+                return Json(files);
+            }
+        }
+        public JsonResult GetFileList()
+        {
+            var list = filesHelper.GetFileList();
+            return Json(list);
+        }
+        [HttpGet]
+        public JsonResult DeleteFile(string file)
+        {
+            filesHelper.DeleteFile(file);
+            return Json("OK");
         }
     }
 }
