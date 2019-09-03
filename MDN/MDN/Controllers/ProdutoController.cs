@@ -7,21 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MDN.Data;
 using MDN.Models.Entities;
-using MDN.Helpers;
+using Microsoft.AspNetCore.Hosting;
+using System.Net.Http.Headers;
 using System.IO;
-using Microsoft.AspNetCore.Hosting.Internal;
-using MDN.ViewModels;
 
 namespace MDN.Controllers
 {
     public class ProdutoController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _environment;
 
-        public ProdutoController(ApplicationDbContext context)
+        public ProdutoController(ApplicationDbContext context, IHostingEnvironment IHostingEnvironment)
         {
+            _environment = IHostingEnvironment;
             _context = context;
-            filesHelper = new FilesHelper(DeleteURL, DeleteType, StorageRoot, UrlBase, tempPath, serverMapPath);
         }
 
         // GET: Produto
@@ -66,16 +66,20 @@ namespace MDN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("T001_ID_PRODUTO,T001_TITULO,T001_DESCRICAO,T001_PRECO,T001_FOTO,T003_ID_UF,T002_ID_CATEGORIA")] T001_PRODUTO t001_PRODUTO)
         {
+            var files = HttpContext.Request.Form.Files;
             if (ModelState.IsValid)
             {
-                t001_PRODUTO.UserName =  _context.Users.Single(x => x.UserName == User.Identity.Name).UserName;
-               // var id = user.Id;
+                t001_PRODUTO.UserName = _context.Users.Single(x => x.UserName == User.Identity.Name).UserName;
+                // var id = user.Id;
                 _context.Add(t001_PRODUTO);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CATEGORIAS"] = new SelectList(_context.Set<T002_CATEGORIA>(), "T002_ID_CATEGORIA", "T002_NO_CATEGORIA", t001_PRODUTO.T002_ID_CATEGORIA);
             ViewData["UFS"] = new SelectList(_context.Set<T003_UF>(), "T003_ID_UF", "T003_NO_UF", t001_PRODUTO.T003_ID_UF);
+
+
+
             return View(t001_PRODUTO);
         }
 
@@ -168,67 +172,6 @@ namespace MDN.Controllers
         private bool T001_PRODUTOExists(int id)
         {
             return _context.T001_PRODUTO.Any(e => e.T001_ID_PRODUTO == id);
-        }
-
-        //controles do plugin de upload
-        FilesHelper filesHelper;
-        String tempPath = "~/somefiles/";
-        String serverMapPath = "~/Files/somefiles/";
-        private string StorageRoot
-        {
-            get { return Path.Combine(HostingEnvironment.MapPath(serverMapPath)); }
-        }
-        private string UrlBase = "/Files/somefiles/";
-        String DeleteURL = "/FileUpload/DeleteFile/?file=";
-        String DeleteType = "GET";
-
-
-        public ActionResult Show()
-        {
-            JsonFiles ListOfFiles = filesHelper.GetFileList();
-            var model = new FilesViewModel()
-            {
-                Files = ListOfFiles.files
-            };
-
-            return View(model);
-        }
-
-        public ActionResult Edit()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public JsonResult Upload()
-        {
-            var resultList = new List<ViewDataUploadFilesResult>();
-
-            var CurrentContext = HttpContext;
-
-            filesHelper.UploadAndShowResults(CurrentContext, resultList);
-            JsonFiles files = new JsonFiles(resultList);
-
-            bool isEmpty = !resultList.Any();
-            if (isEmpty)
-            {
-                return Json("Error ");
-            }
-            else
-            {
-                return Json(files);
-            }
-        }
-        public JsonResult GetFileList()
-        {
-            var list = filesHelper.GetFileList();
-            return Json(list);
-        }
-        [HttpGet]
-        public JsonResult DeleteFile(string file)
-        {
-            filesHelper.DeleteFile(file);
-            return Json("OK");
         }
     }
 }

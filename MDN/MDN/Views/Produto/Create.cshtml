@@ -12,13 +12,13 @@
 
 
 
-<h4>Inserir anúncio</h4>
+@*<h4>Inserir anúncio</h4>
 <h2 align="center">O que você está anunciando?</h2>
 <hr />
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="frmProduto">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="T001_TITULO" class="control-label">TÍTULO</label>
@@ -26,47 +26,65 @@
                 <span asp-validation-for="T001_TITULO" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="T001_DESCRICAO" class="control-label">DESCRIÇÃO</label>
+                <label asp-for="T001_DESCRICAO" class="control-label">DESCRIÇÃO</label>*@
                 @*@Html.TextArea("DESCRIÇÃO", new { rows = 10, cols = 40 })*@
-                <textarea asp-for="T001_DESCRICAO" class="form-control" rows="5" cols="33"></textarea>
+                @*<textarea asp-for="T001_DESCRICAO" class="form-control" rows="5" cols="33"></textarea>
                 <span asp-validation-for="T001_DESCRICAO" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="T001_PRECO" class="control-label">PREÇO</label>
                 <input asp-for="T001_PRECO" class="form-control" />
                 <span asp-validation-for="T001_PRECO" class="text-danger"></span>
-            </div>
+            </div>*@
             @*<div class="form-group">
                     <label asp-for="T001_FOTO" class="control-label"></label>
                     <input asp-for="T001_FOTO" class="form-control" />
                     <span asp-validation-for="T001_FOTO" class="text-danger"></span>
                 </div>*@
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="T003_ID_UF" class="control-label">UF</label>
                 <select asp-for="T003_ID_UF" class="form-control" asp-items="ViewBag.UFS"></select>
             </div>
             <div class="form-group">
                 <label asp-for="T002_ID_CATEGORIA" class="control-label">CATEGORIA</label>
                 <select asp-for="T002_ID_CATEGORIA" class="form-control" asp-items="ViewBag.CATEGORIAS"></select>
-            </div>
+            </div>*@
             @*<div class="form-group">
                 <input type="file" accept=".png, .jpg, .jpeg" multiple />
                 <img src="~/images/uploadButton.png" />
-            </div>*@
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+            </div>*@
+        @*</form>
     </div>
-</div>
+</div>*@
 @Html.Partial("_Upload")
-<div>
+@*<div>
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@
 
 
 
 @section Scripts {
+
+    <script>
+        $('#btnEnviar').click(function () { 
+            data = $('#frmProduto').serialize();
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: "/Produto/Create",
+                data: data
+            }).done(function (result) {
+                alert()
+              
+            }).fail(function (error) {
+                console.error(error);
+            });
+
+        })
+    </script>
 
     <script>
         var $form = null;
