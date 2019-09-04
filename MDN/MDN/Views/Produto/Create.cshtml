@@ -4,119 +4,144 @@
     ViewData["Title"] = "Create";
 }
 
-<link href="~/css/fileUploadPlugin/jquery.fileupload.css" rel="stylesheet" />
-<link href="~/css/fileUploadPlugin/jquery.fileupload-ui.css" rel="stylesheet" />
-<link href="~/css/fileUploadPlugin/blueimp-gallery.css" rel="stylesheet" />
-<link href="~/css/fileUploadPlugin/blueimp-gallery-video.css" rel="stylesheet" />
-<link href="~/css/fileUploadPlugin/blueimp-gallery-indicator.css" rel="stylesheet" />
+@*<link href="~/css/fileUploadPlugin/jquery.fileupload.css" rel="stylesheet" />
+    <link href="~/css/fileUploadPlugin/jquery.fileupload-ui.css" rel="stylesheet" />
+    <link href="~/css/fileUploadPlugin/blueimp-gallery.css" rel="stylesheet" />
+    <link href="~/css/fileUploadPlugin/blueimp-gallery-video.css" rel="stylesheet" />
+    <link href="~/css/fileUploadPlugin/blueimp-gallery-indicator.css" rel="stylesheet" />*@
 
 
-
-@*<h4>Inserir anúncio</h4>
+<h4>Inserir anúncio</h4>
 <h2 align="center">O que você está anunciando?</h2>
 <hr />
+<form id="fileupload" method="POST" enctype="multipart/form-data" asp-action="Create" asp-controller="Produto">
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" id="frmProduto">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="T001_TITULO" class="control-label">TÍTULO</label>
                 <input asp-for="T001_TITULO" class="form-control" />
                 <span asp-validation-for="T001_TITULO" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="T001_DESCRICAO" class="control-label">DESCRIÇÃO</label>*@
+                <label asp-for="T001_DESCRICAO" class="control-label">DESCRIÇÃO</label>
                 @*@Html.TextArea("DESCRIÇÃO", new { rows = 10, cols = 40 })*@
-                @*<textarea asp-for="T001_DESCRICAO" class="form-control" rows="5" cols="33"></textarea>
+                <textarea asp-for="T001_DESCRICAO" class="form-control" rows="5" cols="33"></textarea>
                 <span asp-validation-for="T001_DESCRICAO" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="T001_PRECO" class="control-label">PREÇO</label>
                 <input asp-for="T001_PRECO" class="form-control" />
                 <span asp-validation-for="T001_PRECO" class="text-danger"></span>
-            </div>*@
-            @*<div class="form-group">
-                    <label asp-for="T001_FOTO" class="control-label"></label>
-                    <input asp-for="T001_FOTO" class="form-control" />
-                    <span asp-validation-for="T001_FOTO" class="text-danger"></span>
-                </div>*@
-            @*<div class="form-group">
+            </div>
+            <div class="form-group">
                 <label asp-for="T003_ID_UF" class="control-label">UF</label>
                 <select asp-for="T003_ID_UF" class="form-control" asp-items="ViewBag.UFS"></select>
             </div>
             <div class="form-group">
                 <label asp-for="T002_ID_CATEGORIA" class="control-label">CATEGORIA</label>
                 <select asp-for="T002_ID_CATEGORIA" class="form-control" asp-items="ViewBag.CATEGORIAS"></select>
-            </div>*@
-            @*<div class="form-group">
-                <input type="file" accept=".png, .jpg, .jpeg" multiple />
-                <img src="~/images/uploadButton.png" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>*@
-        @*</form>
+        </div>
     </div>
-</div>*@
-@Html.Partial("_Upload")
-@*<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
+
+    @*<div class="row fileupload-buttonbar">
+            <div class="col-lg-7">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-primary fileinput-button">
+                    <i class="glyphicon glyphicon-camera"></i>
+                    <span>Adicionar fotos</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                <button id="btnEnviar" type="submit" class="btn btn-primary start">
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span>Start upload</span>
+                        </button>
+                        <button type="reset" class="btn btn-warning cancel">
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                            <span>Cancel upload</span>
+                        </button>
+                        <button type="button" class="btn btn-danger delete">
+                            <i class="glyphicon glyphicon-trash"></i>
+                            <span>Delete</span>
+                        </button>
+                    <input type="checkbox" class="toggle">
+                <!-- The global file processing state -->
+                <span class="fileupload-process"></span>
+            </div>
+            <!-- The global progress state -->
+            <div class="col-lg-5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress state -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <!-- The global progress state -->
+        <div class="col-lg-5 fileupload-progress fade">
+            <!-- The global progress bar -->
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+            </div>
+            <!-- The extended global progress state -->
+            <div class="progress-extended">&nbsp;</div>
+        </div>
+
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+        <button type="submit" class="btn btn-success start">
+            <i class="glyphicon glyphicon-upload"></i>
+            <span>Criar Anúncio</span>
+        </button>*@
+
+    <input type="file" name="files[]" multiple accept="image/*">
+    <br />
+    <br />
+
+    <button type="submit" class="btn btn-success start">
+        <i class="glyphicon glyphicon-upload"></i>
+        <span>Criar Anúncio</span>
+    </button>
+</form>
+
 
 
 
 @section Scripts {
-
-    <script>
-        $('#btnEnviar').click(function () { 
-            data = $('#frmProduto').serialize();
-            $.ajax({
-                dataType: "json",
-                type: "POST",
-                url: "/Produto/Create",
-                data: data
-            }).done(function (result) {
-                alert()
-              
-            }).fail(function (error) {
-                console.error(error);
-            });
-
-        })
-    </script>
-
-    <script>
-        var $form = null;
-        $(function () {
-
-            $form = $('#fileupload').fileupload({
-                dataType: 'json'
-            });
-
-        });
-        $('#fileupload').addClass('fileupload-processing');
-    </script>
-
-    <script src="~/js/fileUploadPlugin/modernizr-2.6.2.js"></script>
-    <script src="~/js/fileUploadPlugin/respond.min.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery-ui-1.11.4.min.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.ui.widget.js"></script>
-    <script src="~/js/fileUploadPlugin/tmpl.min.js"></script>
-    <script src="~/js/fileUploadPlugin/load-image.all.min.js"></script>
-    <script src="~/js/fileUploadPlugin/canvas-to-blob.min.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.iframe-transport.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.fileupload.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.fileupload-process.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.fileupload-image.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.validate.min.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.fileupload-audio.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.fileupload-video.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.fileupload-validate.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.fileupload-ui.js"></script>
-    <script src="~/js/fileUploadPlugin/blueimp-gallery.min.js"></script>
-    <script src="~/js/fileUploadPlugin/blueimp-gallery-video.min.js"></script>
-    <script src="~/js/fileUploadPlugin/blueimp-gallery-indicator.min.js"></script>
-    <script src="~/js/fileUploadPlugin/jquery.blueimp-gallery.min.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @*<script>
+            var $form = null;
+            $(function () {
+
+                $form = $('#fileupload').fileupload({
+                    dataType: 'json'
+                });
+
+            });
+            $('#fileupload').addClass('fileupload-processing');
+        </script>
+
+        <script src="~/js/fileUploadPlugin/modernizr-2.6.2.js"></script>
+        <script src="~/js/fileUploadPlugin/respond.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery-ui-1.11.4.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.ui.widget.js"></script>
+        <script src="~/js/fileUploadPlugin/tmpl.min.js"></script>
+        <script src="~/js/fileUploadPlugin/load-image.all.min.js"></script>
+        <script src="~/js/fileUploadPlugin/canvas-to-blob.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.iframe-transport.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-process.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-image.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.validate.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-audio.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-video.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-validate.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-ui.js"></script>
+        <script src="~/js/fileUploadPlugin/blueimp-gallery.min.js"></script>
+        <script src="~/js/fileUploadPlugin/blueimp-gallery-video.min.js"></script>
+        <script src="~/js/fileUploadPlugin/blueimp-gallery-indicator.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.blueimp-gallery.min.js"></script>*@
+
 }

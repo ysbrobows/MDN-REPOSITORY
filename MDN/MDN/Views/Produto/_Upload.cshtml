@@ -3,7 +3,7 @@
 <h4>Inserir anúncio</h4>
 <h2 align="center">O que você está anunciando?</h2>
 <hr />
-<form id="fileupload" method="POST" enctype="multipart/form-data" data-url="@Url.Action("Create","Produto")">
+<form id="fileupload" method="POST" enctype="multipart/form-data" asp-action="Index" asp-controller="Upload">
 
     <div class="row">
         <div class="col-md-4">
@@ -80,7 +80,7 @@
 
     <!-- The table listing the files available for upload/download -->
     <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
-    <button id="btnEnviar" type="submit" class="btn btn-success start">
+    <button type="submit" class="btn btn-success start">
         @*<i class="glyphicon glyphicon-upload"></i>*@
         <span>Criar Anúncio</span>
     </button>

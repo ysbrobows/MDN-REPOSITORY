@@ -124,9 +124,10 @@ namespace MDN
 
 
 //**************************************************************************************************************************************
-//USE[SISGTS2]
+//USE[SISMDN]
 //GO
 
+///****** Object:  Table [dbo].[T002_CATEGORIA]    Script Date: 04/09/2019 17:15:28 ******/
 //SET ANSI_NULLS ON
 //GO
 
@@ -148,10 +149,12 @@ namespace MDN
 //GO
 
 
+
 //**************************************************************************************************************************************
-//USE[SISGTS2]
+//USE[SISMDN]
 //GO
 
+///****** Object:  Table [dbo].[T003_UF]    Script Date: 04/09/2019 17:16:43 ******/
 //SET ANSI_NULLS ON
 //GO
 
@@ -176,10 +179,10 @@ namespace MDN
 
 
 //**************************************************************************************************************************************
-
-//USE[SISGTS2]
+//USE[SISMDN]
 //GO
 
+///****** Object:  Table [dbo].[T001_PRODUTO]    Script Date: 04/09/2019 17:13:37 ******/
 //SET ANSI_NULLS ON
 //GO
 
@@ -197,6 +200,7 @@ namespace MDN
 //	[T001_PRECO] [money] NULL,
 //	[T002_ID_CATEGORIA] [int] NULL,
 //	[T003_ID_UF] [int] NULL,
+//	[UserName] [nvarchar] (256) NULL,
 // CONSTRAINT[PK_T001_PRODUTO] PRIMARY KEY CLUSTERED
 //(
 //   [T001_ID_PRODUTO] ASC
@@ -222,5 +226,6 @@ namespace MDN
 //ALTER TABLE[dbo].[T001_PRODUTO]
 //CHECK CONSTRAINT[FK_T001_PRODUTO_T003_UF]
 //GO
+
 
 

@@ -66,13 +66,72 @@ namespace MDN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("T001_ID_PRODUTO,T001_TITULO,T001_DESCRICAO,T001_PRECO,T001_FOTO,T003_ID_UF,T002_ID_CATEGORIA")] T001_PRODUTO t001_PRODUTO)
         {
-            var files = HttpContext.Request.Form.Files;
+
             if (ModelState.IsValid)
             {
-                t001_PRODUTO.UserName = _context.Users.Single(x => x.UserName == User.Identity.Name).UserName;
+              //  t001_PRODUTO.UserName = _context.Users.Single(x => x.UserName == User.Identity.Name).UserName;
                 // var id = user.Id;
-                _context.Add(t001_PRODUTO);
+                var retorno = _context.Add(t001_PRODUTO);
                 await _context.SaveChangesAsync();
+
+                var newFileName = string.Empty;
+
+                if (HttpContext.Request.Form.Files != null)
+                {
+                    var FileRoot = string.Empty;
+                    var fileName = string.Empty;
+                    string PathDB = string.Empty;
+
+                    var files = HttpContext.Request.Form.Files;
+
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            //Getting FileName
+                            fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+
+                            //Assigning Unique Filename (Guid)
+                            var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+
+                            //Getting file Extension
+                           var FileExtension = Path.GetExtension(fileName);
+
+                            var T001_ID_PRODUTO = retorno.Entity.T001_ID_PRODUTO.ToString();
+
+                           // var FilePatch = Path.Combine(_environment.WebRootPath, T001_ID_PRODUTO);
+
+                            // concating  FileName + FileExtension
+                            newFileName = myUniqueFileName + FileExtension;
+
+                            // Combines two strings into a path.
+                            //fileName = Path.Combine(_environment.WebRootPath, "uploadImages") + $@"\{newFileName}";
+                            FileRoot = String.Concat(_environment.WebRootPath, "\\uploadImages");
+
+                            if (!Directory.Exists(FileRoot))
+                            {
+                                Directory.CreateDirectory(FileRoot);
+                            }
+
+                            var FilePatch = String.Concat(FileRoot, "\\" , T001_ID_PRODUTO);
+                       
+
+                            if (!Directory.Exists(FilePatch))
+                            {
+                                Directory.CreateDirectory(FilePatch);
+                            }
+
+                            fileName = Path.Combine(FilePatch) + $@"\{newFileName}";
+
+                            using (FileStream fs = System.IO.File.Create(fileName))
+                            {
+                                file.CopyTo(fs);
+                                fs.Flush();
+                            }
+                        }
+                    }
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CATEGORIAS"] = new SelectList(_context.Set<T002_CATEGORIA>(), "T002_ID_CATEGORIA", "T002_NO_CATEGORIA", t001_PRODUTO.T002_ID_CATEGORIA);
