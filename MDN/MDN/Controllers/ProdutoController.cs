@@ -10,6 +10,7 @@ using MDN.Models.Entities;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
 using System.IO;
+using MDN.ViewModels;
 
 namespace MDN.Controllers
 {
@@ -38,18 +39,29 @@ namespace MDN.Controllers
             {
                 return NotFound();
             }
+            
+            AnuncioVM Anuncio = new AnuncioVM();
+            Anuncio.caminho = HttpContext.Request.Host.Value;
+            String fullPath = String.Concat(_environment.WebRootPath, "\\uploadImages\\", id);
+            if (Directory.Exists(fullPath))
+            {
+                DirectoryInfo dir = new DirectoryInfo(fullPath);
+                Anuncio.Imagens = dir.GetFiles();
+            }
+            //JsonFiles files = new JsonFiles(r);
 
-            var t001_PRODUTO = await _context.T001_PRODUTO
+            Anuncio.Produto = await _context.T001_PRODUTO
                 .Include(t => t.T002_CATEGORIANavigation)
                 .Include(t => t.T003_UFNavigation)
                 .SingleOrDefaultAsync(m => m.T001_ID_PRODUTO == id);
-            if (t001_PRODUTO == null)
+            if (Anuncio.Produto == null)
             {
                 return NotFound();
             }
 
-            return View(t001_PRODUTO);
+            return View(Anuncio);
         }
+
 
         // GET: Produto/Create
         public IActionResult Create()
@@ -69,7 +81,9 @@ namespace MDN.Controllers
 
             if (ModelState.IsValid)
             {
-              //  t001_PRODUTO.UserName = _context.Users.Single(x => x.UserName == User.Identity.Name).UserName;
+                t001_PRODUTO.UserName = _context.Users.Single(x => x.UserName == User.Identity.Name).UserName;
+                t001_PRODUTO.T001_DT_CRIACAO = DateTime.Now;
+                t001_PRODUTO.T001_ATIVO = false;
                 // var id = user.Id;
                 var retorno = _context.Add(t001_PRODUTO);
                 await _context.SaveChangesAsync();
@@ -86,7 +100,7 @@ namespace MDN.Controllers
 
                     foreach (var file in files)
                     {
-                        if (file.Length > 0)
+                        if (file.Length > 0) 
                         {
                             //Getting FileName
                             fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
@@ -95,7 +109,7 @@ namespace MDN.Controllers
                             var myUniqueFileName = Convert.ToString(Guid.NewGuid());
 
                             //Getting file Extension
-                           var FileExtension = Path.GetExtension(fileName);
+                            var FileExtension = Path.GetExtension(fileName);
 
                             var T001_ID_PRODUTO = retorno.Entity.T001_ID_PRODUTO.ToString();
 

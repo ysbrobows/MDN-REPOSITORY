@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MDN.Models.Entities;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,12 +9,10 @@ namespace MDN.ViewModels
 {
     public class AnuncioVM
     {
-        public int T001_ID_PRODUTO { get; set; }
-        public string T001_TITULO { get; set; }
-        public string T001_DESCRICAO { get; set; }
-        public decimal T001_PRECO { get; set; }
-        public string T001_FOTO { get; set; }
-        public int T002_ID_CATEGORIA { get; set; }
-        public int T003_ID_UF { get; set; }
+        public T001_PRODUTO Produto { get; set; }
+        public FileInfo[] Imagens { get; set ; }
+
+        public string caminho { get; set; }
+
     }
 }
