@@ -5,10 +5,34 @@
 }
 
 @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">*@
+<div class="col-md-12">
+    <div class="line mb10px">
+        <div class="section_OLXad-header">
+            <a href="#gocontent" id="gocontent"></a>
+            <div class="OLXad-title-box mb10px">
+                <h1 id="ad_title" class="OLXad-title">
+                    @Model.Produto.T001_TITULO
+                </h1>
+            </div>
+            <div class="OLXad-date mb5px">
+                <p class="text" style="color:gray">
+                    Inserido em: 10 Setembro às 07:19
+                </p>
+            </div>
+        </div>
 
-<h2>@Model.Produto.T001_TITULO</h2>
 
-<div class="col-md-6">
+        <div class="section_OLXad-price-header">
+            <div class="price-header-box">
+                <div class="OLXad-price-box">
+                    <span class="OLXad-price">R$ @Model.Produto.T001_PRECO</span>
+                </div>
+                <span class="OLXad-price-box-arrow"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-7">
 
 
     <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
@@ -21,13 +45,13 @@
                 if (contador == 0)
                 {
                     <div class="item active">
-                        <img  src="@caminho" alt="Primeiro Slide" class="img-responsive">
+                        <img src="@caminho" alt="Primeiro Slide" class="img-responsive" style="max-width: 500px; max-height: 500px">
                     </div>
                 }
                 if (contador != 0)
                 {
                     <div class="item">
-                        <img  src="@caminho" alt="Segundo Slide" class="img-responsive">
+                        <img src="@caminho" alt="Segundo Slide" class="img-responsive" style="max-width: 500px; max-height: 500px">
                     </div>
                 }
                 contador++;
@@ -43,7 +67,7 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-    
+
 </div>
 
 
@@ -55,52 +79,80 @@
         <img src="@caminho"/>
 
     }*@
-<div class="col-md-6">
+
+<div class="col-md-5">
+
+
     <div>
-        <h4>T001_PRODUTO</h4>
         <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Produto.T001_TITULO)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Produto.T001_TITULO)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Produto.T001_DESCRICAO)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Produto.T001_DESCRICAO)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Produto.T001_PRECO)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Produto.T001_PRECO)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Produto.T002_CATEGORIANavigation)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Produto.T002_CATEGORIANavigation.T002_ID_CATEGORIA)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Produto.T003_UFNavigation)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Produto.T003_UFNavigation.T003_ID_UF)
-            </dd>
-        </dl>
+
+        <h4>
+            @Html.DisplayFor(model => model.Produto.T001_DESCRICAO)
+        </h4>
     </div>
-    </div>
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.Produto.T001_ID_PRODUTO">Edit</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>
+</div>
+@*<div class="col-md-12">
+    <a asp-action="Edit" asp-route-id="@Model.Produto.T001_ID_PRODUTO">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>*@
 
 
-    @section Scripts {
+@section Scripts {
 
-      @*<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>*@
-        <script>$('.carousel').carousel()</script>
+    @*<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>*@
+    <script>$('.carousel').carousel()</script>
+}
+<style>
+    .section_OLXad-price-header .OLXad-price-box {
+        background: #9027b0;
+        height: 64px;
+        line-height: 66px;
+        width: 335px;
+        border-radius: 5px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        position: relative;
     }
+
+    .section_OLXad-price-header .OLXad-price-box-arrow:after {
+        content: '';
+        display: block;
+        width: 47.2px;
+        height: 47.2px;
+        background: #9027b0;
+        transform: rotate(44.7deg);
+        border-radius: 5px;
+        border-bottom-left-radius: 4px;
+    }
+
+    .section_OLXad-header {
+        display: block;
+        float: left;
+        margin-right: 20px;
+        overflow: hidden;
+        width: 584px;
+    }
+
+    .section_OLXad-price-header {
+        float: right;
+        padding-left: 0;
+        position: relative;
+        width: 335px;
+        padding-top: 15px;
+    }
+
+        .section_OLXad-price-header .OLXad-price-box-arrow {
+            position: absolute;
+            transform: scaleX(.7) translateY(-.5px) translateX(-.9px);
+            top: 9px;
+            left: -20px;
+            padding-top: 15px;
+        }
+
+        .section_OLXad-price-header .OLXad-price-box .OLXad-price {
+            color: #fff;
+            font-size: 2.333em;
+            font-weight: 700;
+            margin-left: 25px;
+        }
+</style>

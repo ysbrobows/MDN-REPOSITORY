@@ -11,7 +11,7 @@
     <link href="~/css/fileUploadPlugin/blueimp-gallery-indicator.css" rel="stylesheet" />*@
 
 
-<h4>Inserir anúncio</h4>
+@*<h4>Inserir anúncio</h4>*@
 <h2 align="center">O que você está anunciando?</h2>
 <hr />
 <form id="fileupload" method="POST" enctype="multipart/form-data" asp-action="Create" asp-controller="Produto">
@@ -42,6 +42,7 @@
                 <label asp-for="T002_ID_CATEGORIA" class="control-label">CATEGORIA</label>
                 <select asp-for="T002_ID_CATEGORIA" class="form-control" asp-items="ViewBag.CATEGORIAS"></select>
             </div>
+   
         </div>
     </div>
 
@@ -96,7 +97,10 @@
             <span>Criar Anúncio</span>
         </button>*@
 
-    <input type="file" name="files[]" multiple accept="image/*">
+    <input id="fileupload2" type="file" name="files[]" multiple="multiple" accept="image/*">
+    <div id="dvPreview2">
+    </div>
+
     <br />
     <br />
 
@@ -107,10 +111,46 @@
 </form>
 
 
+<style>
 
+
+
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+     
+        $(function () {
+            $("#fileupload2").change(function () {
+                if (typeof (FileReader) != "undefined") {
+                    var dvPreview = $("#dvPreview2");
+                    dvPreview.html("");
+                    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+                    $($(this)[0].files).each(function () {
+                        var file = $(this);
+                        if (regex.test(file[0].name.toLowerCase())) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                var img = $("<img />");
+                                img.attr("style", "height:100px;width: 100px");
+                                img.attr("src", e.target.result);
+                                dvPreview.append(img);
+                            }
+                            reader.readAsDataURL(file[0]);
+                        } else {
+                            alert(file[0].name + " is not a valid image file.");
+                            dvPreview.html("");
+                            return false;
+                        }
+                    });
+                } else {
+                    alert("This browser does not support HTML5 FileReader.");
+                }
+            });
+        });
+
+    </script>
     @*<script>
             var $form = null;
             $(function () {
