@@ -127,7 +127,7 @@ namespace MDN
 //USE[SISMDN]
 //GO
 
-///****** Object:  Table [dbo].[T002_CATEGORIA]    Script Date: 04/09/2019 17:15:28 ******/
+///****** Object:  Table [dbo].[T002_CATEGORIA]    Script Date: 13/09/2019 16:53:49 ******/
 //SET ANSI_NULLS ON
 //GO
 
@@ -150,11 +150,13 @@ namespace MDN
 
 
 
+
+
 //**************************************************************************************************************************************
 //USE[SISMDN]
 //GO
 
-///****** Object:  Table [dbo].[T003_UF]    Script Date: 04/09/2019 17:16:43 ******/
+///****** Object:  Table [dbo].[T003_UF]    Script Date: 13/09/2019 16:54:20 ******/
 //SET ANSI_NULLS ON
 //GO
 
@@ -177,12 +179,11 @@ namespace MDN
 
 
 
-
 //**************************************************************************************************************************************
 //USE[SISMDN]
 //GO
 
-///****** Object:  Table [dbo].[T001_PRODUTO]    Script Date: 04/09/2019 17:13:37 ******/
+///****** Object:  Table [dbo].[T001_PRODUTO]    Script Date: 13/09/2019 16:52:54 ******/
 //SET ANSI_NULLS ON
 //GO
 
@@ -196,8 +197,9 @@ namespace MDN
 
 //  [T001_TITULO] [varchar] (100) NULL,
 //	[T001_DESCRICAO] [varchar] (8000) NULL,
-//	[T001_FOTO] [nchar] (10) NULL,
-//	[T001_PRECO] [money] NULL,
+//	[T001_PRECO] [int] NULL,
+//	[T001_DT_CRIACAO] [datetime] NULL,
+//	[T001_ATIVO] [bit] NULL,
 //	[T002_ID_CATEGORIA] [int] NULL,
 //	[T003_ID_UF] [int] NULL,
 //	[UserName] [nvarchar] (256) NULL,
@@ -226,6 +228,5 @@ namespace MDN
 //ALTER TABLE[dbo].[T001_PRODUTO]
 //CHECK CONSTRAINT[FK_T001_PRODUTO_T003_UF]
 //GO
-
 
 
