@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Produto\MeusAnuncios.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\css\bootstrap-imageupload.min.css" />
     <Content Remove="wwwroot\js\bootstrap-imageupload.min.js" />
   </ItemGroup>

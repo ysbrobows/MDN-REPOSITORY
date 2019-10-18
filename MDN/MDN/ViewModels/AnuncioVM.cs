@@ -11,8 +11,7 @@ namespace MDN.ViewModels
     {
         public T001_PRODUTO Produto { get; set; }
         public FileInfo[] Imagens { get; set ; }
-
         public string caminho { get; set; }
-
+        public string telefone { get; set; }
     }
 }

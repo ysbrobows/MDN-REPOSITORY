@@ -28,9 +28,82 @@ namespace MDN.Controllers
         // GET: Produto
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.T001_PRODUTO.Include(t => t.T002_CATEGORIANavigation).Include(t => t.T003_UFNavigation);
-            return View(await applicationDbContext.ToListAsync());
+            List<AnuncioGridVM> Anuncios = new List<AnuncioGridVM>();
+
+            var PRODUTOS = _context.Set<T001_PRODUTO>().Select(
+                x => new AnuncioGridVM
+                {
+                     T001_ID_PRODUTO = x.T001_ID_PRODUTO,
+                     T001_TITULO = x.T001_TITULO,
+                     T001_DESCRICAO = x.T001_DESCRICAO,
+                     T001_PRECO = x.T001_PRECO,
+                     T001_DT_CRIACAO = x.T001_DT_CRIACAO,
+                     T001_ATIVO = x.T001_ATIVO,
+                     T003_ID_UF = x.T003_ID_UF,
+                     T002_ID_CATEGORIA = x.T002_ID_CATEGORIA,
+                     UserName = x.UserName
+                }).Take(10);
+
+            foreach (var item in PRODUTOS)
+            {
+                String fullPath = String.Concat(_environment.WebRootPath, "\\uploadImages\\", item.T001_ID_PRODUTO);
+                if (Directory.Exists(fullPath))
+                {
+                    DirectoryInfo dir = new DirectoryInfo(fullPath);
+                    var NomeImagem = dir.GetFiles().Select(x => x.Name).FirstOrDefault();
+                    item.caminhoImagem = "https://" + HttpContext.Request.Host.Value + "/uploadImages/" + item.T001_ID_PRODUTO + "/" + NomeImagem;
+                    Anuncios.Add(item);
+                }
+                else
+                {
+                    item.caminhoImagem = "https://" + HttpContext.Request.Host.Value + "/uploadImages/semfoto.jpg";
+                    Anuncios.Add(item);
+                }
+            }
+
+
+            return View(Anuncios);
         }
+
+        public async Task<IActionResult> MeusAnuncios()
+        {
+            List<AnuncioGridVM> Anuncios = new List<AnuncioGridVM>();
+
+            var PRODUTOS = _context.Set<T001_PRODUTO>().Where(x => x.UserName == User.Identity.Name).Select(
+                x => new AnuncioGridVM
+                {
+                    T001_ID_PRODUTO = x.T001_ID_PRODUTO,
+                    T001_TITULO = x.T001_TITULO,
+                    T001_DESCRICAO = x.T001_DESCRICAO,
+                    T001_PRECO = x.T001_PRECO,
+                    T001_DT_CRIACAO = x.T001_DT_CRIACAO,
+                    T001_ATIVO = x.T001_ATIVO,
+                    T003_ID_UF = x.T003_ID_UF,
+                    T002_ID_CATEGORIA = x.T002_ID_CATEGORIA,
+                    UserName = x.UserName
+                }).ToList();
+
+            foreach (var item in PRODUTOS)
+            {
+                String fullPath = String.Concat(_environment.WebRootPath, "\\uploadImages\\", item.T001_ID_PRODUTO);
+                if (Directory.Exists(fullPath))
+                {
+                    DirectoryInfo dir = new DirectoryInfo(fullPath);
+                    var NomeImagem = dir.GetFiles().Select(x => x.Name).FirstOrDefault();
+                    item.caminhoImagem = "https://" + HttpContext.Request.Host.Value + "/uploadImages/" + item.T001_ID_PRODUTO + "/" + NomeImagem;
+                    Anuncios.Add(item);
+                }
+                else
+                {
+                    item.caminhoImagem = "https://" + HttpContext.Request.Host.Value + "/uploadImages/semfoto.jpg";
+                    Anuncios.Add(item);
+                }
+            }
+
+
+            return View(Anuncios);
+        }
+
 
         // GET: Produto/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -50,10 +123,19 @@ namespace MDN.Controllers
             }
             //JsonFiles files = new JsonFiles(r);
 
-            Anuncio.Produto = await _context.T001_PRODUTO
+            var produto = _context.T001_PRODUTO
                 .Include(t => t.T002_CATEGORIANavigation)
                 .Include(t => t.T003_UFNavigation)
-                .SingleOrDefaultAsync(m => m.T001_ID_PRODUTO == id);
+                .Join(_context.Users, x => x.UserName, y => y.UserName, (x, y) => new AnuncioVM
+                {
+                    Produto = x,
+                    telefone = y.PhoneNumber                    
+                })
+                .Where(x => x.Produto.T001_ID_PRODUTO == id).First();
+
+            Anuncio.Produto = produto.Produto;
+            Anuncio.telefone = produto.telefone;
+
             if (Anuncio.Produto == null)
             {
                 return NotFound();

@@ -1,0 +1,22 @@
+﻿@model List<MDN.ViewModels.AnuncioGridVM>
+
+@foreach (var item in Model)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5">
+                <a asp-action="Details" asp-route-id="@item.T001_ID_PRODUTO">
+   
+                </a>
+            </div>
+            <div class="col-md-5">
+                <a asp-action="Details" asp-route-id="@item.T001_ID_PRODUTO">
+                    @Html.DisplayFor(modelItem => item.T001_TITULO)
+                </a>
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(modelItem => item.T001_PRECO) R$
+            </div>
+        </div>
+    </div>
+}
