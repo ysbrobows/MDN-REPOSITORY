@@ -4,38 +4,44 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h2>Index</h2>
+<br />
+@*<h2>Index</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 
 <div class="container-fluid" style="background-color:rebeccapurple">
     <div class="row">
-        <div class="col-md-1">
-            Imoveis
+        <div class="col-md-2">
+            <img class="img-responsive center-block" src="~/images/rosh.png" width="32px" height="32px" />
+            <h4 style="color:white ; text-align-last : center">Rosh</h4>
         </div>
-        <div class="col-md-1">
-            Carros
+        <div class="col-md-2">
+            <img class="img-responsive center-block" src="~/images/stem.png" width="32px" height="32px" />
+            <h4 style="color:white ; text-align-last : center">Stem</h4>
         </div>
-        <div class="col-md-1">
-            Eletronicos
+        <div class="col-md-2">
+            <img class="img-responsive center-block" src="~/images/vaso.png" style="" width="32px" height="32px" />
+            <h4 style="color:white ; text-align-last : center">Vaso</h4>
+
         </div>
-        <div class="col-md-1">
-            Casa
+        <div class="col-md-2">
+            <img class="img-responsive center-block" src="~/images/abafador.png" width="32px" height="32px" />
+            <h4 style="color:white ; text-align-last : center">Abafador</h4>
+
         </div>
-        <div class="col-md-1">
-            Esportes
+        <div class="col-md-2">
+            <img class="img-responsive center-block" src="~/images/carvao.png" width="32px" height="32px" />
+            <h4 style="color:white ; text-align-last : center ; vertical-align: bottom"> Carvão</h4>
         </div>
-        <div class="col-md-1">
-            Moda
+        <div class="col-md-2">
+            <img class="img-responsive center-block" src="~/images/completo.png" width="32px" height="32px" />
+            <h4 style="color:white ; text-align-last : center"> Completo</h4>
         </div>
 
     </div>
-    <br>
-    <br>
-    <br>
 
 </div>
+<br />
             @Html.Partial("_ItemGrid")

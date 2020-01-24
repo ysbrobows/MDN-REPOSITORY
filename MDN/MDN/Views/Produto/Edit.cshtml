@@ -1,54 +1,147 @@
-﻿@model MDN.Models.Entities.T001_PRODUTO
+﻿@model MDN.ViewModels.AnuncioVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
 
-<h2>Edit</h2>
+@*<link href="~/css/fileUploadPlugin/jquery.fileupload.css" rel="stylesheet" />
+    <link href="~/css/fileUploadPlugin/jquery.fileupload-ui.css" rel="stylesheet" />
+    <link href="~/css/fileUploadPlugin/blueimp-gallery.css" rel="stylesheet" />
+    <link href="~/css/fileUploadPlugin/blueimp-gallery-video.css" rel="stylesheet" />
+    <link href="~/css/fileUploadPlugin/blueimp-gallery-indicator.css" rel="stylesheet" />*@
 
-<h4>T001_PRODUTO</h4>
+
+@*<h4>Inserir anúncio</h4>*@
+<h2 align="center">O que você está anunciando?</h2>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="T001_ID_PRODUTO" />
-            <div class="form-group">
-                <label asp-for="T001_TITULO" class="control-label"></label>
-                <input asp-for="T001_TITULO" class="form-control" />
-                <span asp-validation-for="T001_TITULO" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="T001_DESCRICAO" class="control-label"></label>
-                <input asp-for="T001_DESCRICAO" class="form-control" />
-                <span asp-validation-for="T001_DESCRICAO" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="T001_PRECO" class="control-label"></label>
-                <input asp-for="T001_PRECO" class="form-control" />
-                <span asp-validation-for="T001_PRECO" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="T003_ID_UF" class="control-label"></label>
-                <select asp-for="T003_ID_UF" class="form-control" asp-items="ViewBag.T003_ID_UF"></select>
-                <span asp-validation-for="T003_ID_UF" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="T002_ID_CATEGORIA" class="control-label"></label>
-                <select asp-for="T002_ID_CATEGORIA" class="form-control" asp-items="ViewBag.T002_ID_CATEGORIA"></select>
-                <span asp-validation-for="T002_ID_CATEGORIA" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
+<form id="fileupload" method="POST" enctype="multipart/form-data" asp-action="Create" asp-controller="Produto">
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="@Model.Produto.T001_TITULO" class="control-label">TÍTULO</label>
+                <input asp-for="@Model.Produto.T001_TITULO" class="form-control" />
+                <span asp-validation-for="@Model.Produto.T001_TITULO" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Produto.T001_DESCRICAO" class="control-label">DESCRIÇÃO</label>
+                @*@Html.TextArea("DESCRIÇÃO", new { rows = 10, cols = 40 })*@
+                <textarea asp-for="@Model.Produto.T001_DESCRICAO" class="form-control" rows="5" cols="33"></textarea>
+                <span asp-validation-for="@Model.Produto.T001_DESCRICAO" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Produto.T001_PRECO" class="control-label">PREÇO</label>
+                <input asp-for="@Model.Produto.T001_PRECO" class="form-control" />
+                <span asp-validation-for="@Model.Produto.T001_PRECO" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="T003_ID_UF" class="control-label">UF</label>
+                <select asp-for="T003_ID_UF" class="form-control" asp-items="ViewBag.UFS"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="T002_ID_CATEGORIA" class="control-label">CATEGORIA</label>
+                <select asp-for="T002_ID_CATEGORIA" class="form-control" asp-items="ViewBag.CATEGORIAS"></select>
+            </div>*@
+
+        </div>
+    </div>
+
+
+    <input id="fileupload2" type="file" name="files[]" multiple="multiple" accept="image/*">
+    <div style="display: inline-block">
+        @foreach (var imagem in @Model.Imagens)
+        {
+            var caminho = "https://" + @Model.caminho + "/uploadImages/" + Model.Produto.T001_ID_PRODUTO + "/" + imagem.Name;
+
+
+            <img src="@caminho" alt="Segundo Slide" class="img-responsive" style="max-width: 100px; max-height: 100px;display: inline-block">
+
+
+        }
+    </div>
+    <div id="dvPreview2">
+
+
+    </div>
+
+    <br />
+    <br />
+
+    <button type="submit" class="btn btn-success start">
+        <i class="glyphicon glyphicon-upload"></i>
+        <span>Criar Anúncio</span>
+    </button>
+</form>
+
+
+<style>
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        $(function () {
+            $("#fileupload2").change(function () {
+                if (typeof (FileReader) != "undefined") {
+                    var dvPreview = $("#dvPreview2");
+     
+                    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+                    $($(this)[0].files).each(function () {
+                        var file = $(this);
+                        if (regex.test(file[0].name.toLowerCase())) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                var img = $("<img />");
+                                img.attr("style", "height:100px;width: 100px");
+                                img.attr("src", e.target.result);
+                                dvPreview.append(img);
+                            }
+                            reader.readAsDataURL(file[0]);
+                        } else {
+                            alert(file[0].name + " is not a valid image file.");
+                            dvPreview.html("");
+                            return false;
+                        }
+                    });
+                } else {
+                    alert("This browser does not support HTML5 FileReader.");
+                }
+            });
+        });
+
+    </script>
+    @*<script>
+            var $form = null;
+            $(function () {
+
+                $form = $('#fileupload').fileupload({
+                    dataType: 'json'
+                });
+
+            });
+            $('#fileupload').addClass('fileupload-processing');
+        </script>
+
+        <script src="~/js/fileUploadPlugin/modernizr-2.6.2.js"></script>
+        <script src="~/js/fileUploadPlugin/respond.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery-ui-1.11.4.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.ui.widget.js"></script>
+        <script src="~/js/fileUploadPlugin/tmpl.min.js"></script>
+        <script src="~/js/fileUploadPlugin/load-image.all.min.js"></script>
+        <script src="~/js/fileUploadPlugin/canvas-to-blob.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.iframe-transport.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-process.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-image.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.validate.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-audio.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-video.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-validate.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.fileupload-ui.js"></script>
+        <script src="~/js/fileUploadPlugin/blueimp-gallery.min.js"></script>
+        <script src="~/js/fileUploadPlugin/blueimp-gallery-video.min.js"></script>
+        <script src="~/js/fileUploadPlugin/blueimp-gallery-indicator.min.js"></script>
+        <script src="~/js/fileUploadPlugin/jquery.blueimp-gallery.min.js"></script>*@
+
 }

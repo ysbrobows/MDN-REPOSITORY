@@ -10,6 +10,7 @@ using MDN.Models.Entities;
 using Microsoft.AspNetCore.Hosting;
 using MDN.Data;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MDN.Controllers
 {
@@ -58,7 +59,7 @@ namespace MDN.Controllers
                 }
             }
 
-
+            ViewData["UFS"] = new SelectList(_context.Set<T003_UF>(), "T003_ID_UF", "T003_NO_UF");
             return View(Anuncios);
         }
 
