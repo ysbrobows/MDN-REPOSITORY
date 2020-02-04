@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
 using System.IO;
 using MDN.ViewModels;
+using MDN.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace MDN.Controllers
 {
@@ -18,11 +21,15 @@ namespace MDN.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _environment;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public ProdutoController(ApplicationDbContext context, IHostingEnvironment IHostingEnvironment)
+        public ProdutoController(ApplicationDbContext context, IHostingEnvironment IHostingEnvironment,  UserManager<ApplicationUser> userManager,  SignInManager<ApplicationUser> signInManager)
         {
             _environment = IHostingEnvironment;
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Produto
@@ -41,7 +48,7 @@ namespace MDN.Controllers
                      T001_ATIVO = x.T001_ATIVO,
                      T003_ID_UF = x.T003_ID_UF,
                      T002_ID_CATEGORIA = x.T002_ID_CATEGORIA,
-                     UserName = x.UserName
+                     User_Id = x.User_Id
                 }).Take(10);
 
             foreach (var item in PRODUTOS)
@@ -65,11 +72,18 @@ namespace MDN.Controllers
             return View(Anuncios);
         }
 
+        public Claim GetUserClaim()
+        {
+           return User.Claims.FirstOrDefault(y => y.Type == ClaimTypes.NameIdentifier);
+        }
+
         public async Task<IActionResult> MeusAnuncios()
         {
             List<AnuncioGridVM> Anuncios = new List<AnuncioGridVM>();
 
-            var PRODUTOS = _context.Set<T001_PRODUTO>().Where(x => x.UserName == User.Identity.Name).Select(
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            var PRODUTOS = _context.Set<T001_PRODUTO>().Where(x => x.User_Id == user.Id).Select(
                 x => new AnuncioGridVM
                 {
                     T001_ID_PRODUTO = x.T001_ID_PRODUTO,
@@ -80,7 +94,7 @@ namespace MDN.Controllers
                     T001_ATIVO = x.T001_ATIVO,
                     T003_ID_UF = x.T003_ID_UF,
                     T002_ID_CATEGORIA = x.T002_ID_CATEGORIA,
-                    UserName = x.UserName
+                    User_Id = x.User_Id
                 }).ToList();
 
             foreach (var item in PRODUTOS)
@@ -123,18 +137,12 @@ namespace MDN.Controllers
             }
             //JsonFiles files = new JsonFiles(r);
 
-            var produto = _context.T001_PRODUTO
+            Anuncio.Produto = _context.T001_PRODUTO
                 .Include(t => t.T002_CATEGORIANavigation)
                 .Include(t => t.T003_UFNavigation)
-                .Join(_context.Users, x => x.UserName, y => y.UserName, (x, y) => new AnuncioVM
-                {
-                    Produto = x,
-                    telefone = y.PhoneNumber                    
-                })
-                .Where(x => x.Produto.T001_ID_PRODUTO == id).First();
+                .Where(x => x.T001_ID_PRODUTO == id).First();
 
-            Anuncio.Produto = produto.Produto;
-            Anuncio.telefone = produto.telefone;
+            Anuncio.telefone = _context.Users.Where(x => x.Id == Anuncio.Produto.User_Id).Select(x => x.PhoneNumber).First();
 
             if (Anuncio.Produto == null)
             {
@@ -163,7 +171,7 @@ namespace MDN.Controllers
 
             if (ModelState.IsValid)
             {
-                t001_PRODUTO.UserName = _context.Users.Single(x => x.UserName == User.Identity.Name).UserName;
+                t001_PRODUTO.User_Id = _userManager.FindByNameAsync(User.Identity.Name).ToString() ;
                 t001_PRODUTO.T001_DT_CRIACAO = DateTime.Now;
                 t001_PRODUTO.T001_ATIVO = false;
                 // var id = user.Id;

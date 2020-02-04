@@ -16,7 +16,7 @@ namespace MDN.ViewModels
         public bool T001_ATIVO { get; set; }
         public int T003_ID_UF { get; set; }
         public int T002_ID_CATEGORIA { get; set; }
-        public string UserName { get; set; }
+        public string User_Id { get; set; }
         public string caminhoImagem { get; set; }
     }
 }

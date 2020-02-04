@@ -43,8 +43,21 @@ namespace MDN
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
+
+            services.Configure<SecurityStampValidatorOptions>(options =>
+                    options.ValidationInterval = TimeSpan.FromMinutes(2)); 
+
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
+                // Add application services.
+                services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
         }
@@ -71,7 +84,7 @@ namespace MDN
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{uf?}");
             });
         }
     }

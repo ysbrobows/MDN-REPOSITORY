@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MDN.Models.Entities
 {
@@ -19,7 +16,7 @@ namespace MDN.Models.Entities
         public int T003_ID_UF { get; set; }
         public int T002_ID_CATEGORIA { get; set; }
 
-        public string UserName { get; set; }
+        public string User_Id { get; set; }
 
         //[ForeignKey("Id")]
         //[InverseProperty("T001_PRODUTO")]

@@ -77,16 +77,35 @@
 
 </body>
 </html>
+@RenderSection("Scripts", required: false)
 @section Scripts {
-    @RenderSection("Scripts", required: false)
-    
+
+
 }
-    <script>
-
-        $('#slcUfs').change(function () {
-
-            alert($(this).val())
-        })
+<script>
 
 
-    </script>
+    $('#slcUfs').change(function () {
+        $.ajax({
+            url: 'Home/CarregarAnunciosPorUf',
+            dataType: "html",
+            data: { uf: $(this).val() }
+        }).done(function (result) {
+            $('#divAnuncios').html(result);
+
+        });
+    })
+
+    function carregarAnuncios() {
+        $.ajax({
+            url: 'Home/CarregarAnuncios',
+            dataType: "html"
+        }).done(function (result) {
+            alert('aa')
+            $('#divAnuncios').html(result);
+
+        });
+
+    }
+
+</script>
